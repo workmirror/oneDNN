@@ -55,10 +55,10 @@ option(DNNL_ENABLE_CPU_ISA_HINTS
 # Building properties and scope
 # =============================
 
-set(DNNL_LIBRARY_TYPE "SHARED" CACHE STRING
+set(DNNL_LIBRARY_TYPE "STATIC" CACHE STRING
     "specifies whether oneDNN library should be SHARED or STATIC")
-option(DNNL_BUILD_EXAMPLES "builds examples"  ON)
-option(DNNL_BUILD_TESTS "builds tests" ON)
+option(DNNL_BUILD_EXAMPLES "builds examples"  OFF)
+option(DNNL_BUILD_TESTS "builds tests" OFF)
 option(DNNL_BUILD_FOR_CI
     "specifies whether oneDNN library will use special testing environment for
     internal testing processes"
@@ -96,7 +96,7 @@ set(DNNL_LIBRARY_NAME "dnnl" CACHE STRING
 
 message(STATUS "DNNL_LIBRARY_NAME: ${DNNL_LIBRARY_NAME}")
 
-set(DNNL_ENABLE_WORKLOAD "TRAINING" CACHE STRING
+set(DNNL_ENABLE_WORKLOAD "INFERENCE" CACHE STRING
     "Specifies a set of functionality to be available at build time. Designed to
     decrease the final memory disk footprint of the shared object or application
     statically linked against the library. Valid values:
@@ -107,7 +107,7 @@ if(NOT "${DNNL_ENABLE_WORKLOAD}" MATCHES "^(TRAINING|INFERENCE)$")
     message(FATAL_ERROR "Unsupported workload type: ${DNNL_ENABLE_WORKLOAD}")
 endif()
 
-set(DNNL_ENABLE_PRIMITIVE "ALL" CACHE STRING
+set(DNNL_ENABLE_PRIMITIVE "CONVOLUTION;MATMUL" CACHE STRING
     "Specifies a set of primitives to be available at build time. Valid values:
     - ALL (the default). Includes all primitives to be enabled.
     - <PRIMITIVE_NAME>. Includes only the selected primitive to be enabled.
@@ -179,19 +179,19 @@ option(DNNL_ENABLE_JIT_PROFILING
     runtime with VTune Amplifier (on by default). Without the
     registrations, VTune Amplifier would report data collected inside
     the kernels as `outside any known module`."
-    ON)
+    OFF)
 
 option(DNNL_ENABLE_ITT_TASKS
     "Enable ITT Tasks tagging feature and tag all primitive execution 
     (on by default). VTune Amplifier can group profiling results based 
     on those ITT tasks and show corresponding timeline information."
-    ON)
+    OFF)
 
 # ===================
 # Engine capabilities
 # ===================
 
-set(DNNL_CPU_RUNTIME "OMP" CACHE STRING
+set(DNNL_CPU_RUNTIME "SEQ" CACHE STRING
     "specifies the threading runtime for CPU engines;
     supports OMP (default), TBB or DPCPP (DPC++ CPU engines).
 
